@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the addServiceDialog function from the add_area library, for the Dart programming language.">
+  <title>addServiceDialog function - add_area library - Dart API</title>
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../static-assets/github.css">
+  <link rel="stylesheet" href="../static-assets/styles.css">
+  <link rel="icon" href="../static-assets/favicon.png">
+
+</head>
+
+<body data-base-href="../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">area</a></li>
+    <li><a href="../providers_add_area/providers_add_area-library.html">add_area</a></li>
+    <li class="self-crumb">addServiceDialog function</li>
+  </ol>
+  <div class="self-name">addServiceDialog</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+      <form class="search-sidebar" role="search">
+        <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+      </form>
+    </header>
+    
+    <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+      <li><a href="../index.html">area</a></li>
+      <li><a href="../providers_add_area/providers_add_area-library.html">add_area</a></li>
+      <li class="self-crumb">addServiceDialog function</li>
+    </ol>
+    
+    <h5>add_area library</h5>
+    <ol>
+  <li class="section-title"><a href="../providers_add_area/providers_add_area-library.html#classes">Classes</a></li>
+  <li><a href="../providers_add_area/AreaInputs-class.html">AreaInputs</a></li>
+  <li><a href="../providers_add_area/Item-class.html">Item</a></li>
+  <li><a href="../providers_add_area/Panel-class.html">Panel</a></li>
+
+
+
+
+  <li class="section-title"><a href="../providers_add_area/providers_add_area-library.html#properties">Properties</a></li>
+  <li><a href="../providers_add_area/data.html">data</a></li>
+  <li><a href="../providers_add_area/params.html">params</a></li>
+
+  <li class="section-title"><a href="../providers_add_area/providers_add_area-library.html#functions">Functions</a></li>
+  <li><a href="../providers_add_area/addServiceDialog.html">addServiceDialog</a></li>
+  <li><a href="../providers_add_area/getAreaInputs.html">getAreaInputs</a></li>
+  <li><a href="../providers_add_area/isValidArea.html">isValidArea</a></li>
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-left-->
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div><h1><span class="kind-function">addServiceDialog</span> function  </h1></div>
+
+    <section class="multi-line-signature">
+        <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+                <span class="name ">addServiceDialog</span>
+(<wbr><ol class="parameter-list"><li><span class="parameter" id="addServiceDialog-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span></li>
+<li><span class="parameter" id="addServiceDialog-param-option"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">option</span>, </span></li>
+<li><span class="parameter" id="addServiceDialog-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">id</span></span></li>
+</ol>)
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span></h2>
+      <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; addServiceDialog(
+    BuildContext context, String option, String id) async {
+  List&lt;Service&gt; s = await requestServices() ?? [Service(&#39;&#39;, [], [])];
+
+  AlertDialog areaPopUp = AlertDialog(
+    title: Center(
+        child: Text(&quot;Add Service&quot;, style: TextStyle(color: Color(0xFF363636)))),
+    content: Container(
+      height: MediaQuery.of(context).size.height &#47; 2.0,
+      alignment: Alignment.center,
+      child: Panel(services: s),
+    ),
+    actions: &lt;Widget&gt;[
+      TextButton(
+        child: Text(&#39;Continue&#39;),
+        onPressed: () async {
+          final inputState = await getAreaInputs(context);
+          if (inputState == true) Navigator.of(context).pop(true);
+        },
+      ),
+      TextButton(
+        child: Text(&#39;Cancel&#39;),
+        onPressed: () =&gt; Navigator.of(context).pop(false),
+      )
+    ],
+  );
+
+  final state = await showDialog(
+      context: context, builder: (BuildContext context) =&gt; areaPopUp);
+
+  if (isValidArea() == false) return;
+  if (state != null &amp;&amp; state)
+    (option == &#39;add&#39;)
+        ? await registerArea(data.map((e) =&gt; e.header).toList(), params)
+        : await updateArea(data.map((e) =&gt; e.header).toList(), params, id);
+  if (params != null) params.clear();
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    area
+      1.0.0+1
+  </span>
+
+</footer>
+
+<script src="../static-assets/highlight.pack.js"></script>
+<script src="../static-assets/script.js"></script>
+
+
+</body>
+
+</html>

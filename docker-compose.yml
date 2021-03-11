@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  server:
+    build: ./backEnd
+    ports:
+      - "8080:8080"
+    networks:
+      - areareseau
+
+  client_mobile:
+    build: ./area
+    depends_on:
+      - server
+    networks:
+      - areareseau
+    volumes:
+      - ./area/:/usr/app
+  client_web:
+    build: ./front-web-nuxt
+    depends_on:
+      - server
+      - client_mobile
+    ports:
+      - "8081:8081"
+    networks:
+      - areareseau
+    volumes:
+      - ./fron-web-nuxt/:/usr/app
+
+networks:
+  areareseau:
